@@ -15,6 +15,10 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
 import re
 from unidecode import unidecode
 from .numbers import normalize_numbers
+
+from text_cleaner import remove, keep
+from text_cleaner.processor.common import ASCII, ALPHA, DIGIT, GENERAL_PUNCTUATION, SYMBOLS_AND_PUNCTUATION
+from text_cleaner.processor.chinese import CHINESE, CHINESE_SYMBOLS_AND_PUNCTUATION
 import unicodedata
 
 # Regular expression matching whitespace:
