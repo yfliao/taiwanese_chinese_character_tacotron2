@@ -91,6 +91,6 @@ def english_cleaners(text):
 
 def chinese_cleaners(text):
   '''Pipeline for English text, including number and abbreviation expansion.'''
-  text = convert_to_ascii(text)
+#  text = convert_to_ascii(text)
   text = collapse_whitespace(text)
   return text
