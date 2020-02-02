@@ -15,7 +15,7 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
 import re
 from unidecode import unidecode
 from .numbers import normalize_numbers
-
+import unicodedata
 
 # Regular expression matching whitespace:
 _whitespace_re = re.compile(r'\s+')
@@ -73,8 +73,7 @@ def basic_cleaners(text):
 
 
 def transliteration_cleaners(text):
-  '''Pipeline for non-English text that transliterates to ASCII.'''
-  text = convert_to_ascii(text)
+  '''Pipeline for non-English text that transliterates to ASCII.'''u  text = convert_to_ascii(text)
   text = lowercase(text)
   text = collapse_whitespace(text)
   return text
@@ -92,5 +91,9 @@ def english_cleaners(text):
 def chinese_cleaners(text):
   '''Pipeline for English text, including number and abbreviation expansion.'''
 #  text = convert_to_ascii(text)
+  text = text.encode('UTF-8').decode('UTF-8')
+  text = keep (text, [ASCII, GENERAL_PUNCTUATION, SYMBOLS_AND_PUNCTUATION, CHINESE, CHINESE_SYMBOLS_AND_PUNCTUATION])
+  text = unicodedata.normalize('NFKC', text)
+  text = remove (text, [CHINESE_SYMBOLS_AND_PUNCTUATION])
   text = collapse_whitespace(text)
   return text
