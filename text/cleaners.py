@@ -15,6 +15,7 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
 import re
 from unidecode import unidecode
 from .numbers import normalize_numbers
+from pywubi import wubi
 
 from text_cleaner import remove, keep
 from text_cleaner.processor.common import ASCII, ALPHA, DIGIT, GENERAL_PUNCTUATION, SYMBOLS_AND_PUNCTUATION
@@ -69,6 +70,9 @@ def convert_to_ascii(text):
   return unidecode(text)
 
 
+def convert_to_wubi(text):
+  return ' '.join(wubi(text))
+
 def basic_cleaners(text):
   '''Basic pipeline that lowercases and collapses whitespace without transliteration.'''
   text = lowercase(text)
@@ -99,6 +103,17 @@ def chinese_cleaners(text):
   text = keep (text, [ASCII, GENERAL_PUNCTUATION, SYMBOLS_AND_PUNCTUATION, CHINESE, CHINESE_SYMBOLS_AND_PUNCTUATION])
   text = unicodedata.normalize('NFKC', text)
   text = remove (text, [CHINESE_SYMBOLS_AND_PUNCTUATION])
+  text = collapse_whitespace(text)
+  print ("after chinese_cleaners= ", text)
+  return text
+
+def chinese_wubi_cleaners(text):
+  print ("before chinese_cleaners= ", text)
+  text = text.encode('UTF-8').decode('UTF-8')
+  text = keep (text, [ASCII, GENERAL_PUNCTUATION, SYMBOLS_AND_PUNCTUATION, CHINESE, CHINESE_SYMBOLS_AND_PUNCTUATION])
+  text = unicodedata.normalize('NFKC', text)
+  text = remove (text, [CHINESE_SYMBOLS_AND_PUNCTUATION])
+  text = convert_to_wubi(text)
   text = collapse_whitespace(text)
   print ("after chinese_cleaners= ", text)
   return text
